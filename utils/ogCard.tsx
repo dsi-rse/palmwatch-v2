@@ -2,11 +2,12 @@ import { ImageResponse } from "next/og";
 
 export const ogSize = { width: 1200, height: 630 };
 
-// Shared social card: title + up to 3 stats.
+// Shared social card: title, optional subtitle, up to 3 stats.
 export function ogCard(
   eyebrow: string,
   title: string,
-  stats: { label: string; value: string }[] = []
+  stats: { label: string; value: string }[] = [],
+  subtitle?: string
 ) {
   return new ImageResponse(
     (
@@ -24,9 +25,10 @@ export function ogCard(
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 30, color: "#f87171", textTransform: "uppercase", letterSpacing: 2 }}>{eyebrow}</div>
-            <div style={{ fontSize: title.length > 40 ? 56 : 72, lineHeight: 1.1, marginTop: 12 }}>
+            <div style={{ fontSize: title.length > 60 ? 46 : title.length > 40 ? 56 : 72, lineHeight: 1.1, marginTop: 12 }}>
               {title}
             </div>
+            {subtitle && <div style={{ fontSize: 24, color: "#d1d5db", marginTop: 12 }}>{subtitle}</div>}
           </div>
           {stats.length > 0 && (
             <div style={{ display: "flex", gap: 60 }}>
@@ -59,3 +61,6 @@ export const safeDecode = (s: string) => {
     return s;
   }
 };
+
+// generateImageMetadata payload: one image per page, with page-specific alt text.
+export const cardMeta = (alt: string) => [{ id: "card", size: ogSize, contentType: "image/png", alt }];
