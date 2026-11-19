@@ -206,6 +206,17 @@ class MillDataQuery {
     return this.getFullData(groupMills);
   }
 
+  // Cheap existence check (same filter as getCountryData/getOwnerData/getGroupData),
+  // so share-card alt text can avoid echoing names that aren't in the data.
+  hasMillsWith(
+    column: "Country" | "Parent Company" | "Group Name",
+    value: string
+  ) {
+    return (
+      this.uml!.filter(escape((d: UmlData) => d[column] === value)).numRows() > 0
+    );
+  }
+
   getQuantileTimeseries(
     data: ColumnTable,
     cols: string[] = fullYearRangeColumns,
