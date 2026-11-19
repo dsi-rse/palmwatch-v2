@@ -7,11 +7,12 @@ import cmsClient from "@/sanity/lib/client";
 import Head from "next/head";
 import { Footer } from "@/components/Footer";
 
-// Production uses the stable prod domain; VERCEL_URL is per-deployment and may sit behind deployment protection.
-const host =
-  (process.env.VERCEL_ENV === "production" && process.env.VERCEL_PROJECT_PRODUCTION_URL) ||
-  process.env.VERCEL_URL;
-const VERCEL_DOMAIN = host ? `https://${host}` : "https://palmwatch-v2.vercel.app";
+// Canonical domain (palmwatch.org 308-redirects here). Previews use their own deployment URL.
+const PROD_DOMAIN = "https://palmwatch.inclusivedevelopment.net";
+const VERCEL_DOMAIN =
+  process.env.VERCEL_ENV !== "production" && process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : PROD_DOMAIN;
 
 export const metadata = {
   title: "PalmWatch: Tracking the Impact of Big Brands' Palm Oil Use",
