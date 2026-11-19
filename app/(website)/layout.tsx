@@ -9,10 +9,10 @@ import { Footer } from "@/components/Footer";
 
 // Canonical domain (palmwatch.org 308-redirects here). Previews use their own deployment URL.
 const PROD_DOMAIN = "https://palmwatch.inclusivedevelopment.net";
+// Branch URL matches what Next uses for file-based OG images on previews.
+const previewHost = process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL;
 const VERCEL_DOMAIN =
-  process.env.VERCEL_ENV !== "production" && process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : PROD_DOMAIN;
+  process.env.VERCEL_ENV !== "production" && previewHost ? `https://${previewHost}` : PROD_DOMAIN;
 
 export const metadata = {
   title: "PalmWatch: Tracking the Impact of Big Brands' Palm Oil Use",
