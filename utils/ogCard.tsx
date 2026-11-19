@@ -24,7 +24,7 @@ export function ogCard(
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 30, color: "#f87171", textTransform: "uppercase", letterSpacing: 2 }}>{eyebrow}</div>
-            <div style={{ fontSize: title.length > 40 ? 56 : 72, fontWeight: 700, lineHeight: 1.1, marginTop: 12 }}>
+            <div style={{ fontSize: title.length > 40 ? 56 : 72, lineHeight: 1.1, marginTop: 12 }}>
               {title}
             </div>
           </div>
@@ -38,7 +38,7 @@ export function ogCard(
               ))}
             </div>
           )}
-          <div style={{ fontSize: 30, fontWeight: 700 }}>PalmWatch</div>
+          <div style={{ fontSize: 30 }}>PalmWatch</div>
         </div>
       </div>
     ),
@@ -50,3 +50,12 @@ export const fmt = (n: unknown) =>
   n !== null && n !== "" && isFinite(Number(n))
     ? Number(n).toLocaleString("en-US", { maximumFractionDigits: 1 })
     : "N/A";
+
+// Params can arrive URL-encoded (page metadata) or already decoded (image route), so decode once and tolerate stray "%".
+export const safeDecode = (s: string) => {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s;
+  }
+};
