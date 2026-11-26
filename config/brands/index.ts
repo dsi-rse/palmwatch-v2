@@ -29,6 +29,7 @@ const brands: {[key:string]: BrandSchema} = {
   "Mars": Mars,
   "Mondelez": Mondelez,
   "Nestlé": Nestle,
+  "Nestle": Nestle, // the data and /brands links use the unaccented name
   "PepsiCo": PepsiCo,
   "Procter & Gamble": ProcterAndGamble,
   "Reckitt Benckiser (RB)": ReckittBenckiser,

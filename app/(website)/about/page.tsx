@@ -1,5 +1,5 @@
 import cmsClient from "@/sanity/lib/client";
-import { PortableText } from "@/sanity/lib/components";
+import { PortableText, RichText } from "@/sanity/lib/components";
 
 export const revalidate = 60
 
@@ -7,7 +7,7 @@ export default async function Page() {
   const aboutPageContent = await cmsClient.getAboutPage();
   return (
     <div className="prose max-w-3xl mx-auto py-4">
-      <PortableText value={aboutPageContent.content} />
+      <RichText value={aboutPageContent?.content} />
       <div>
         {!!aboutPageContent?.faq?.length && (
           <>
