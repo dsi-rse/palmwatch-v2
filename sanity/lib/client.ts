@@ -26,9 +26,9 @@ class CmsClient {
     try {
       // Next's Data Cache dedupes CMS requests across renders, pages and
       // instances, and keeps serving the last good copy if a refresh fails.
-      // ponytail: time-based, so edits take up to an hour to appear; add a
+      // ponytail: time-based, so edits take up to a day to appear; add a
       // Sanity webhook + revalidateTag if editors need instant updates.
-      return await this.client.fetch<T>(query, params, { next: { revalidate: 3600 } });
+      return await this.client.fetch<T>(query, params, { next: { revalidate: 86400 } });
     } catch (err) {
       console.error('Sanity fetch failed:', err);
       return null;
