@@ -7,8 +7,6 @@ import { AboutPageContent, ContactPageContent, HomePageContent } from './types';
 import { SanityClient } from 'sanity';
 class CmsClient {
   client: SanityClient;
-  brandData: Record<string, BrandSchema> = {}
-  umlData: Record<string, Partial<BrandSchema>> = {}
   
   constructor() {
     this.client = createClient({
@@ -26,7 +24,11 @@ class CmsClient {
   // CMS down or over quota → pages render without CMS content instead of 5XX.
   private async fetch<T>(query: string, params: Record<string, string> = {}): Promise<T | null> {
     try {
-      return await this.client.fetch<T>(query, params);
+      // Next's Data Cache dedupes CMS requests across renders, pages and
+      // instances, and keeps serving the last good copy if a refresh fails.
+      // ponytail: time-based, so edits take up to an hour to appear; add a
+      // Sanity webhook + revalidateTag if editors need instant updates.
+      return await this.client.fetch<T>(query, params, { next: { revalidate: 3600 } });
     } catch (err) {
       console.error('Sanity fetch failed:', err);
       return null;
@@ -34,21 +36,11 @@ class CmsClient {
   }
 
   async getBrandInfo(name: string) {
-    if (this.brandData[name]) {
-      return this.brandData[name];
-    }
-    const data = await this.fetch<BrandSchema>(brandInfoQuery, { name });
-    if (data) this.brandData[name] = data;
-    return data;
+    return await this.fetch<BrandSchema>(brandInfoQuery, { name });
   }
 
   async getUmlInfo(uml: string) {
-    if (this.umlData[uml]) {
-      return this.umlData[uml];
-    }
-    const data = await this.fetch<Partial<BrandSchema>>(umlInfoQuery, { uml });
-    if (data) this.umlData[uml] = data;
-    return data;
+    return await this.fetch<Partial<BrandSchema>>(umlInfoQuery, { uml });
   }
 
   async getCountryInfo(country: string) {
